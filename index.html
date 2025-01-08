@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harmonic NFT</title>
+    <title>NFT with Particle Interaction</title>
     <style>
         body {
             margin: 0;
@@ -26,24 +26,13 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            z-index: 1; /* Размещаем поверх холста */
+            cursor: pointer;
         }
         .nft-container img {
             width: 40%;
             max-width: 600px;
             border-radius: 20px;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
-        }
-        .sun-text {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 48px;
-            font-weight: bold;
-            color: #FFD700;
-            z-index: 2;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
@@ -52,7 +41,6 @@
     <div class="nft-container" onclick="window.open('https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/', '_blank')">
         <img src="image.png" alt="NFT">
     </div>
-    <div class="sun-text">SuN</div>
 
     <script>
         const canvas = document.getElementById('canvas');
@@ -82,6 +70,37 @@
                 if (this.y + this.size > canvas.height || this.y - this.size < 0) {
                     this.speedY = -this.speedY;
                 }
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    if (this === particlesArray[i]) continue;
+                    const dx = this.x - particlesArray[i].x;
+                    const dy = this.y - particlesArray[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < this.size + particlesArray[i].size) {
+                        this.handleCollision(particlesArray[i]);
+                    }
+                }
+            }
+
+            handleCollision(other) {
+                const dx = this.x - other.x;
+                const dy = this.y - other.y;
+                const angle = Math.atan2(dy, dx);
+                const speedX1 = this.speedX;
+                const speedY1 = this.speedY;
+                const speedX2 = other.speedX;
+                const speedY2 = other.speedY;
+
+                this.speedX = speedX1 * Math.cos(angle) * 0.9;
+                this.speedY = speedY1 * Math.sin(angle) * 0.9;
+                other.speedX = speedX2 * Math.cos(angle + Math.PI) * 0.9;
+                other.speedY = speedY2 * Math.sin(angle + Math.PI) * 0.9;
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+                other.x += other.speedX;
+                other.y += other.speedY;
             }
 
             draw() {
@@ -96,13 +115,13 @@
         function init() {
             particlesArray = [];
             for (let i = 0; i < 200; i++) {
-                let size = Math.random() * 40 + 10;
+                let size = Math.random() * 40 + 20;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
                 let colors = ['#FFFF00', '#32CD32', '#FF6347', '#8A2BE2', '#FF4500', '#00FFFF', '#FF1493'];
                 let color = colors[Math.floor(Math.random() * colors.length)];
-                let speedX = (Math.random() * 4) - 2;
-                let speedY = (Math.random() * 4) - 2;
+                let speedX = (Math.random() * 2) - 1;
+                let speedY = (Math.random() * 2) - 1;
                 particlesArray.push(new Particle(x, y, size, color, speedX, speedY));
             }
         }
