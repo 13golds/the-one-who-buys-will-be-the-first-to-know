@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: white; /* Белый фон для всего холста */
+            background: white; /* Белый фон */
         }
         #canvas {
             position: absolute;
@@ -49,6 +49,8 @@
 
         let particlesArray = [];
 
+        const colors = ['#FFD700', '#00FF00', '#8A2BE2', '#FF4500', '#00CED1', '#FF1493', '#FFFF00']; // 7 цветов
+
         class Particle {
             constructor(x, y, size, color, speedX, speedY, rotationSpeed) {
                 this.x = x;
@@ -64,11 +66,12 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Вращение: частицы крутятся против часовой стрелки
+                // Вращение
                 this.angle += this.rotationSpeed;
                 this.x += Math.cos(this.angle) * 2;
                 this.y += Math.sin(this.angle) * 2;
 
+                // Столкновения с краями экрана
                 if (this.x + this.size > canvas.width || this.x - this.size < 0) {
                     this.speedX = -this.speedX;
                 }
@@ -76,17 +79,21 @@
                     this.speedY = -this.speedY;
                 }
 
-                // Проверка столкновений частиц
+                // Столкновения частиц
                 for (let i = 0; i < particlesArray.length; i++) {
                     if (this === particlesArray[i]) continue;
                     const dx = this.x - particlesArray[i].x;
                     const dy = this.y - particlesArray[i].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < this.size + particlesArray[i].size) {
-                        this.speedX = -this.speedX;
-                        this.speedY = -this.speedY;
-                        particlesArray[i].speedX = -particlesArray[i].speedX;
-                        particlesArray[i].speedY = -particlesArray[i].speedY;
+                        // Реалистичное отталкивание
+                        let angle = Math.atan2(dy, dx);
+                        let speed = Math.max(this.speedX * this.speedX + this.speedY * this.speedY, particlesArray[i].speedX * particlesArray[i].speedX + particlesArray[i].speedY * particlesArray[i].speedY);
+                        let push = 0.5 * (this.size + particlesArray[i].size) - distance;
+                        this.speedX -= Math.cos(angle) * push;
+                        this.speedY -= Math.sin(angle) * push;
+                        particlesArray[i].speedX += Math.cos(angle) * push;
+                        particlesArray[i].speedY += Math.sin(angle) * push;
                     }
                 }
             }
@@ -101,15 +108,14 @@
 
         function init() {
             particlesArray = [];
-            for (let i = 0; i < 30; i++) { // Сокращено количество для более контролируемого хаоса
+            for (let i = 0; i < 100; i++) { // Увеличено количество частиц
                 let size = Math.random() * 10 + 15;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let colors = ['#FFD700', '#00FF00', '#8A2BE2']; // Золото, зелёный и фиолетовый цвета
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 let speedX = (Math.random() * 1.5) - 0.75;
                 let speedY = (Math.random() * 1.5) - 0.75;
-                let rotationSpeed = (Math.random() * 0.05) - 0.025; // Вращение против часовой стрелки
+                let rotationSpeed = (Math.random() * 0.05) - 0.025;
                 particlesArray.push(new Particle(x, y, size, color, speedX, speedY, rotationSpeed));
             }
         }
@@ -134,4 +140,3 @@
     </script>
 </body>
 </html>
-
