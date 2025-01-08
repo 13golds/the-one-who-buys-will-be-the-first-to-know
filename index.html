@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT with Particle Interaction</title>
+    <title>NFT Auction</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: transparent; /* Убираем фоновый цвет */
+            background: #4B0082;
             font-family: Arial, sans-serif;
         }
         #canvas {
@@ -58,13 +58,11 @@
                 this.color = color;
                 this.speedX = speedX;
                 this.speedY = speedY;
-                this.mass = size * 0.1; // Массой будем считать размер частиц
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Столкновение с краями экрана
                 if (this.x + this.size > canvas.width || this.x - this.size < 0) {
                     this.speedX = -this.speedX;
                 }
@@ -72,50 +70,19 @@
                     this.speedY = -this.speedY;
                 }
 
-                // Столкновение с другими частицами
                 for (let i = 0; i < particlesArray.length; i++) {
                     if (this === particlesArray[i]) continue;
                     const dx = this.x - particlesArray[i].x;
                     const dy = this.y - particlesArray[i].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < this.size + particlesArray[i].size) {
-                        this.handleCollision(particlesArray[i]);
+                        this.speedX = -this.speedX;
+                        this.speedY = -this.speedY;
+                        particlesArray[i].speedX = -particlesArray[i].speedX;
+                        particlesArray[i].speedY = -particlesArray[i].speedY;
                     }
                 }
             }
-
-            // Обработка столкновения
-            handleCollision(other) {
-                const dx = this.x - other.x;
-                const dy = this.y - other.y;
-                const angle = Math.atan2(dy, dx);
-                const targetX = other.x;
-                const targetY = other.y;
-
-                // Скорость до столкновения
-                const speedX1 = this.speedX;
-                const speedY1 = this.speedY;
-                const speedX2 = other.speedX;
-                const speedY2 = other.speedY;
-
-                // Пространственные скорости
-                const speed1 = Math.sqrt(speedX1 * speedX1 + speedY1 * speedY1);
-                const speed2 = Math.sqrt(speedX2 * speedX2 + speedY2 * speedY2);
-
-                // Расчет новых скоростей после столкновения
-                this.speedX = speed1 * Math.cos(angle) * 0.9;
-                this.speedY = speed1 * Math.sin(angle) * 0.9;
-                other.speedX = speed2 * Math.cos(angle + Math.PI) * 0.9;
-                other.speedY = speed2 * Math.sin(angle + Math.PI) * 0.9;
-
-                // Перемещение
-                this.x += this.speedX;
-                this.y += this.speedY;
-                other.x += other.speedX;
-                other.y += other.speedY;
-            }
-
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -127,11 +94,11 @@
 
         function init() {
             particlesArray = [];
-            for (let i = 0; i < 200; i++) { // Увеличиваем количество шаров
-                let size = Math.random() * 40 + 20;
+            for (let i = 0; i < 100; i++) {
+                let size = Math.random() * 80 + 20;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let colors = ['#FFFF00', '#32CD32', '#FF6347', '#8A2BE2', '#FF4500', '#00FFFF', '#FF1493'];
+                let colors = ['rgba(255, 255, 255, 0.8)', '#FF4500', '#8A2BE2'];
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 let speedX = (Math.random() * 2) - 1;
                 let speedY = (Math.random() * 2) - 1;
