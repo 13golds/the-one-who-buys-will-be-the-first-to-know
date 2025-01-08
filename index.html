@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFT Auction</title>
+    <title>NFT Auction with Particle Effect</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: white; /* Full white background */
-            font-family: Arial, sans-serif;
+            background: white; /* Белый фон для всего холста */
         }
         #canvas {
             position: absolute;
@@ -18,7 +17,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
         }
         .nft-container {
             position: absolute;
@@ -30,7 +28,7 @@
             z-index: 1;
         }
         .nft-container img {
-            width: 220%; /* NFT Sun enlarged to 220% */
+            width: 220%; /* NFT увеличено на 220% */
             max-width: 600px;
             border-radius: 20px;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
@@ -66,7 +64,7 @@
                 this.x += this.speedX;
                 this.y += this.speedY;
 
-                // Swirling effect: particles rotate in counterclockwise direction
+                // Вращение: частицы крутятся против часовой стрелки
                 this.angle += this.rotationSpeed;
                 this.x += Math.cos(this.angle) * 2;
                 this.y += Math.sin(this.angle) * 2;
@@ -78,7 +76,7 @@
                     this.speedY = -this.speedY;
                 }
 
-                // Collision detection for particle interactions
+                // Проверка столкновений частиц
                 for (let i = 0; i < particlesArray.length; i++) {
                     if (this === particlesArray[i]) continue;
                     const dx = this.x - particlesArray[i].x;
@@ -103,15 +101,15 @@
 
         function init() {
             particlesArray = [];
-            for (let i = 0; i < 30; i++) { // Reduced the number to make the chaos more controlled
+            for (let i = 0; i < 30; i++) { // Сокращено количество для более контролируемого хаоса
                 let size = Math.random() * 10 + 15;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let colors = ['#FFD700', '#00FF00', '#8A2BE2']; // Gold, Green, and Violet colors
+                let colors = ['#FFD700', '#00FF00', '#8A2BE2']; // Золото, зелёный и фиолетовый цвета
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 let speedX = (Math.random() * 1.5) - 0.75;
                 let speedY = (Math.random() * 1.5) - 0.75;
-                let rotationSpeed = (Math.random() * 0.05) - 0.025; // Rotation in counterclockwise direction
+                let rotationSpeed = (Math.random() * 0.05) - 0.025; // Вращение против часовой стрелки
                 particlesArray.push(new Particle(x, y, size, color, speedX, speedY, rotationSpeed));
             }
         }
@@ -136,3 +134,4 @@
     </script>
 </body>
 </html>
+
