@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #4B0082;
+            background: white;
             font-family: Arial, sans-serif;
         }
         #canvas {
@@ -51,36 +51,30 @@
         let particlesArray = [];
 
         class Particle {
-            constructor(x, y, size, color, speedX, speedY) {
+            constructor(x, y, size, color, speedX, speedY, rotationSpeed) {
                 this.x = x;
                 this.y = y;
                 this.size = size;
                 this.color = color;
                 this.speedX = speedX;
                 this.speedY = speedY;
+                this.rotationSpeed = rotationSpeed;
+                this.angle = 0;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
+
+                // Swirling effect: particles rotate in counterclockwise direction
+                this.angle += this.rotationSpeed;
+                this.x += Math.cos(this.angle) * 2;
+                this.y += Math.sin(this.angle) * 2;
 
                 if (this.x + this.size > canvas.width || this.x - this.size < 0) {
                     this.speedX = -this.speedX;
                 }
                 if (this.y + this.size > canvas.height || this.y - this.size < 0) {
                     this.speedY = -this.speedY;
-                }
-
-                for (let i = 0; i < particlesArray.length; i++) {
-                    if (this === particlesArray[i]) continue;
-                    const dx = this.x - particlesArray[i].x;
-                    const dy = this.y - particlesArray[i].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < this.size + particlesArray[i].size) {
-                        this.speedX = -this.speedX;
-                        this.speedY = -this.speedY;
-                        particlesArray[i].speedX = -particlesArray[i].speedX;
-                        particlesArray[i].speedY = -particlesArray[i].speedY;
-                    }
                 }
             }
             draw() {
@@ -94,15 +88,16 @@
 
         function init() {
             particlesArray = [];
-            for (let i = 0; i < 100; i++) {
-                let size = Math.random() * 80 + 20;
+            for (let i = 0; i < 50; i++) {
+                let size = Math.random() * 10 + 15;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let colors = ['rgba(255, 255, 255, 0.8)', '#FF4500', '#8A2BE2'];
+                let colors = ['#00FF00', '#FFD700', '#8A2BE2']; // Green, gold, and violet
                 let color = colors[Math.floor(Math.random() * colors.length)];
-                let speedX = (Math.random() * 2) - 1;
-                let speedY = (Math.random() * 2) - 1;
-                particlesArray.push(new Particle(x, y, size, color, speedX, speedY));
+                let speedX = (Math.random() * 1.5) - 0.75;
+                let speedY = (Math.random() * 1.5) - 0.75;
+                let rotationSpeed = (Math.random() * 0.05) - 0.025; // Rotation in counterclockwise direction
+                particlesArray.push(new Particle(x, y, size, color, speedX, speedY, rotationSpeed));
             }
         }
 
@@ -126,4 +121,3 @@
     </script>
 </body>
 </html>
-
