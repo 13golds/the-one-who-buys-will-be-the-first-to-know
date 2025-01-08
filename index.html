@@ -9,11 +9,11 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: white;
+            background: white; /* Full white background */
             font-family: Arial, sans-serif;
         }
         #canvas {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -27,9 +27,10 @@
             transform: translate(-50%, -50%);
             text-align: center;
             cursor: pointer;
+            z-index: 1;
         }
         .nft-container img {
-            width: 40%;
+            width: 220%; /* NFT Sun enlarged to 220% */
             max-width: 600px;
             border-radius: 20px;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
@@ -76,6 +77,20 @@
                 if (this.y + this.size > canvas.height || this.y - this.size < 0) {
                     this.speedY = -this.speedY;
                 }
+
+                // Collision detection for particle interactions
+                for (let i = 0; i < particlesArray.length; i++) {
+                    if (this === particlesArray[i]) continue;
+                    const dx = this.x - particlesArray[i].x;
+                    const dy = this.y - particlesArray[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < this.size + particlesArray[i].size) {
+                        this.speedX = -this.speedX;
+                        this.speedY = -this.speedY;
+                        particlesArray[i].speedX = -particlesArray[i].speedX;
+                        particlesArray[i].speedY = -particlesArray[i].speedY;
+                    }
+                }
             }
             draw() {
                 ctx.fillStyle = this.color;
@@ -88,11 +103,11 @@
 
         function init() {
             particlesArray = [];
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 30; i++) { // Reduced the number to make the chaos more controlled
                 let size = Math.random() * 10 + 15;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let colors = ['#00FF00', '#FFD700', '#8A2BE2']; // Green, gold, and violet
+                let colors = ['#FFD700', '#00FF00', '#8A2BE2']; // Gold, Green, and Violet colors
                 let color = colors[Math.floor(Math.random() * colors.length)];
                 let speedX = (Math.random() * 1.5) - 0.75;
                 let speedY = (Math.random() * 1.5) - 0.75;
