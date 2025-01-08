@@ -26,41 +26,20 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            cursor: pointer;
         }
         .nft-container img {
             width: 40%;
+            max-width: 600px;
             border-radius: 20px;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
-        }
-        .nft-container h1 {
-            color: #ffffff;
-            font-size: 2em;
-            margin-top: 20px;
-        }
-        .nft-container a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 15px 30px;
-            background-color: #ffffff;
-            color: #4B0082;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
-        }
-        .nft-container a:hover {
-            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div class="nft-container">
+    <div class="nft-container" onclick="window.open('https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/', '_blank')">
         <img src="https://lh3.googleusercontent.com/A7k84mtyDGXm1cnPI5jo4MumV-47ivj6kn_KyQs2QiLEn22Ko-ZKuNY1yqUBrRg2jkhBN8Ni0a3CGMnNK9m1ZFlU=w600" alt="NFT">
-        <h1>Exclusive NFT Auction</h1>
-        <a href="https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/" target="_blank">View on OpenSea</a>
     </div>
 
     <script>
@@ -103,10 +82,11 @@
         function init() {
             particlesArray = [];
             for (let i = 0; i < 100; i++) {
-                let size = Math.random() * 5 + 2;
+                let size = Math.random() * 20 + 10;
                 let x = Math.random() * (canvas.width - size * 2);
                 let y = Math.random() * (canvas.height - size * 2);
-                let color = `rgba(${255}, ${255}, ${255}, ${Math.random()})`;
+                let colors = ['rgba(255, 255, 255, 0.8)', '#FF4500', '#8A2BE2'];
+                let color = colors[Math.floor(Math.random() * colors.length)];
                 let speedX = (Math.random() * 0.5) - 0.25;
                 let speedY = (Math.random() * 0.5) - 0.25;
                 particlesArray.push(new Particle(x, y, size, color, speedX, speedY));
