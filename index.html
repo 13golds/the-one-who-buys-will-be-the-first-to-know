@@ -66,13 +66,12 @@
 
     <script>
         function buyNFT() {
-            let userCount = localStorage.getItem('userCount') || 0;
-            userCount = parseInt(userCount) + 1;
-            localStorage.setItem('userCount', userCount);
-            let username = "user " + userCount;
+            let visitCount = localStorage.getItem('visitCount') || 0;
+            visitCount = parseInt(visitCount) + 1;
+            localStorage.setItem('visitCount', visitCount);
 
             let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
-            visitorList.unshift(username);
+            visitorList.unshift(`Visitor ${visitCount}`);
             if (visitorList.length > 10) {
                 visitorList.pop();
             }
@@ -100,4 +99,3 @@
     </script>
 </body>
 </html>
-
