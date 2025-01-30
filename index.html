@@ -35,9 +35,11 @@
             font-family: 'Roboto', sans-serif;
             font-size: 18px;
             color: #333;
-            margin-top: 10px;
+            margin-top: 20px;
             font-style: italic;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
         @media (max-width: 768px) {
             .nft-container img {
@@ -54,6 +56,10 @@
         <img src="nft_art.png" alt="NFT">
     </div>
 
+    <div class="nft-text">
+        NFT buyer receives 1,000,000 recyc to the buyer's wallet address in the BSC network.
+    </div>
+
     <script>
         window.onload = function() {
             let visitCount = localStorage.getItem('visitCount') || 0;
@@ -62,14 +68,10 @@
         };
 
         function buyNFT() {
-            if (confirm("Вы уверены, что хотите перейти к покупке NFT?")) {
+            if (confirm("Are you sure you want to proceed to the NFT purchase?")) {
                 window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
             }
         }
     </script>
-
-    <div class="nft-text">
-        NFT buyer receives 1,000,000 recyc to the buyer's wallet address in the BSC network.
-    </div>
 </body>
 </html>
