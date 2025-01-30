@@ -12,14 +12,6 @@
             background: #FFFFFF;
             font-family: Arial, sans-serif;
         }
-        #canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
         .nft-container {
             position: absolute;
             top: 50%;
@@ -62,90 +54,11 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
     <div class="nft-container" onclick="userVisited()">
         <img src="nft_art.png" alt="NFT">
     </div>
 
-    <div id="user-list">
-        <h3>Посетители OpenSea</h3>
-        <ul id="visitorNames">
-        </ul>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let particlesArray = [];
-        const maxSize = 100;
-
-        class Particle {
-            constructor(x, y, size, color, speedX, speedY) {
-                this.x = x;
-                this.y = y;
-                this.size = maxSize;
-                this.color = color;
-                this.speedX = speedX;
-                this.speedY = speedY;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-                    this.speedX = -this.speedX;
-                }
-                if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-                    this.speedY = -this.speedY;
-                }
-
-                for (let i = 0; i < particlesArray.length; i++) {
-                    if (this === particlesArray[i]) continue;
-                    const dx = this.x - particlesArray[i].x;
-                    const dy = this.y - particlesArray[i].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < this.size) {
-                        this.speedX = -this.speedX;
-                        this.speedY = -this.speedY;
-                        particlesArray[i].speedX = -particlesArray[i].speedX;
-                        particlesArray[i].speedY = -particlesArray[i].speedY;
-                    }
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-            }
-        }
-
-        function init() {
-            particlesArray = [];
-            for (let i = 0; i < 100; i++) {
-                let x = Math.random() * (canvas.width - maxSize * 2) + maxSize;
-                let y = Math.random() * (canvas.height - maxSize * 2) + maxSize;
-                let colors = ['#8A2BE2', '#32CD32', '#FFD700']
-                let color = colors[Math.floor(Math.random() * colors.length)];
-                let speedX = (Math.random() * 2) - 1;
-                let speedY = (Math.random() * 2) - 1;
-                particlesArray.push(new Particle(x, y, maxSize, color, speedX, speedY));
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particlesArray.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
+        <script>
         function userVisited() {
             let username = "Visitor_" + Math.floor(Math.random() * 1000);
             let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
@@ -167,17 +80,7 @@
             });
         }
 
-        init();
-        animate();
-
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
-        });
-
         updateVisitorList();
     </script>
 </body>
 </html>
-
