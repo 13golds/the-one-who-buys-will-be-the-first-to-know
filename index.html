@@ -54,19 +54,28 @@
     </style>
 </head>
 <body>
-    <div class="nft-container" onclick="userVisited()">
+    <div class="nft-container" onclick="buyNFT()">
         <img src="nft_art.png" alt="NFT">
     </div>
 
-        <script>
-        function userVisited() {
+    <div id="user-list">
+        <h3>Посетители OpenSea</h3>
+        <ul id="visitorNames">
+        </ul>
+    </div>
+
+    <script>
+        function buyNFT() {
             let username = "Visitor_" + Math.floor(Math.random() * 1000);
             let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
             visitorList.push(username);
             localStorage.setItem('visitors', JSON.stringify(visitorList));
 
             updateVisitorList();
-            window.open('https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/', '_blank');
+
+            alert("Поздравляем с покупкой NFT! Ознакомьтесь с нашим Recycler Token для призового аккаунта.");
+
+            window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
         }
 
         function updateVisitorList() {
