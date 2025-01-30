@@ -26,42 +26,11 @@
             border-radius: 20px;
             background-color: transparent;
         }
-        #user-list {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(128, 0, 128, 0.7); /* Purple background */
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        #user-list h3 {
-            margin: 0;
-            padding-bottom: 10px;
-            font-size: 18px;
-        }
-        #user-list ul {
-            list-style: none;
-            padding: 0;
-        }
-        #user-list ul li {
-            font-size: 14px;
-            margin: 5px 0;
-        }
     </style>
 </head>
 <body>
     <div class="nft-container" onclick="buyNFT()">
         <img src="nft_art.png" alt="NFT">
-    </div>
-
-    <div id="user-list">
-        <h3>Visitors</h3>
-        <ul id="visitorNames">
-        </ul>
     </div>
 
     <script>
@@ -70,32 +39,10 @@
             visitCount = parseInt(visitCount) + 1;
             localStorage.setItem('visitCount', visitCount);
 
-            let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
-            visitorList.unshift(`Visitor ${visitCount}`);
-            if (visitorList.length > 10) {
-                visitorList.pop();
-            }
-            localStorage.setItem('visitors', JSON.stringify(visitorList));
-
-            updateVisitorList();
-
-            alert("Congratulations on your NFT purchase! Check out our Recycler Token for the prize account.");
-
             window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
         }
-
-        function updateVisitorList() {
-            let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
-            let visitorNames = document.getElementById('visitorNames');
-            visitorNames.innerHTML = '';
-            visitorList.forEach(visitor => {
-                let li = document.createElement('li');
-                li.textContent = visitor;
-                visitorNames.appendChild(li);
-            });
-        }
-
-        updateVisitorList();
     </script>
 </body>
 </html>
+
+  
