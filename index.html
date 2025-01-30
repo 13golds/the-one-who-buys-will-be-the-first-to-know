@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFT Auction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
             background: #FFFFFF;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         .nft-container {
             position: absolute;
@@ -25,14 +26,26 @@
             max-width: 1320px;
             border-radius: 20px;
             background-color: transparent;
+            transition: transform 0.3s ease;
+        }
+        .nft-container img:hover {
+            transform: scale(1.05);
         }
         .nft-text {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 18px;
             color: #333;
             margin-top: 10px;
             font-style: italic;
             text-align: center;
+        }
+        @media (max-width: 768px) {
+            .nft-container img {
+                width: 100%;
+            }
+            .nft-text {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -42,12 +55,16 @@
     </div>
 
     <script>
-        function buyNFT() {
+        window.onload = function() {
             let visitCount = localStorage.getItem('visitCount') || 0;
             visitCount = parseInt(visitCount) + 1;
             localStorage.setItem('visitCount', visitCount);
+        };
 
-            window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
+        function buyNFT() {
+            if (confirm("Вы уверены, что хотите перейти к покупке NFT?")) {
+                window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
+            }
         }
     </script>
 
