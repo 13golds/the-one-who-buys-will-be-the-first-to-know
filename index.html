@@ -30,7 +30,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(128, 0, 128, 0.7);
+            background: rgba(128, 0, 128, 0.7); /* Purple background */
             color: white;
             padding: 10px;
             border-radius: 5px;
@@ -59,44 +59,30 @@
     </div>
 
     <div id="user-list">
-        <h3>Посетители OpenSea</h3>
+        <h3>Latest Visitors</h3>
         <ul id="visitorNames">
         </ul>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
     <script>
-        if (typeof window.ethereum !== 'undefined') {
-            const web3 = new Web3(window.ethereum);
-            
-            async function connectWallet() {
-                try {
-                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    const userAddress = accounts[0];
-                    addVisitor(userAddress);
-                } catch (err) {
-                    console.error("Error:", err);
-                }
-            }
+        function buyNFT() {
+            let userCount = localStorage.getItem('userCount') || 0;
+            userCount = parseInt(userCount) + 1;
+            localStorage.setItem('userCount', userCount);
+            let username = "user " + userCount;
 
-            connectWallet();
-        } else {
-            alert('Please install MetaMask!');
-        }
-
-        function addVisitor(walletAddress) {
             let visitorList = JSON.parse(localStorage.getItem('visitors')) || [];
-            let currentTime = new Date().toLocaleString();
-
-            let visitorData = {
-                walletAddress: walletAddress,
-                time: currentTime
-            };
-
-            visitorList.push(visitorData);
+            visitorList.unshift(username);
+            if (visitorList.length > 10) {
+                visitorList.pop();
+            }
             localStorage.setItem('visitors', JSON.stringify(visitorList));
 
             updateVisitorList();
+
+            alert("Congratulations on your NFT purchase! Check out our Recycler Token for the prize account.");
+
+            window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
         }
 
         function updateVisitorList() {
@@ -105,14 +91,9 @@
             visitorNames.innerHTML = '';
             visitorList.forEach(visitor => {
                 let li = document.createElement('li');
-                li.textContent = `Wallet Address: ${visitor.walletAddress} (Visited at: ${visitor.time})`;
+                li.textContent = visitor;
                 visitorNames.appendChild(li);
             });
-        }
-
-        function buyNFT() {
-            alert("Поздравляем с покупкой NFT! Ознакомьтесь с нашим Recycler Token для призового аккаунта.");
-            window.location.href = 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/74375451549078962159910334757008703286309564266461430122285871489554197774337/';
         }
 
         updateVisitorList();
